@@ -15,7 +15,6 @@ Un pipeline CI que funciona es la diferencia entre un equipo que entrega con con
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: anatomía de `azure-pipelines.yml`, triggers y stages |
-| 10–45' | Reto: pipeline CI con build + test + quality gate |
-| 45–55' | Validación: pipeline verde en Azure DevOps, PR bloqueado si falla |
-| 55–60' | Cierre: `week-15-solution`, optimización de tiempos con cache |
+| 0–20' | Revisión `week-14-solution`: optimización de layers y tamaño de imagen |
+| 20–40' | Contexto + demo: anatomía de `azure-pipelines.yml`, triggers y stages — pipeline CI con build + test + quality gate (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

@@ -29,9 +29,9 @@ git remote add upstream https://github.com/robinson8406/java-formation-lab-2026.
 | Rama | Propósito | Quién la crea |
 |------|-----------|---------------|
 | `main` | Estado estable del repo | Formadores |
-| `week-XX-start` | Código inicial de cada sesión | Formadores (antes del jueves) |
-| `week-XX-solution` | Solución de referencia | Formadores (al cierre, min 55') |
-| `week-XX/<tu-alias>` | Tu entrega personal | Participante |
+| `week-XX-start` | Código inicial de cada sesión | Formadores (jueves de la sesión) |
+| `week-XX-solution` | Solución de referencia | Formadores (jueves siguiente, al inicio de esa sesión) |
+| `week-XX/<tu-alias>` | Tu entrega personal | Participante (antes del jueves siguiente) |
 
 ### Flujo para participar en una sesión
 
@@ -112,14 +112,15 @@ session:  cambios propios de una sesión de formación
 
 ### Estructura de cada sesión
 
-Cada sesión dura **1 hora** y sigue este formato fijo:
+Cada sesión dura **1 hora** y sigue este formato fijo. El reto **ya no se resuelve en vivo**: se resuelve entre semana y se revisa en la sesión siguiente.
 
 | Segmento | Tiempo | Contenido |
 |----------|--------|-----------|
-| Contexto + demo | 0–10' | Qué vamos a mejorar, por qué importa, demo rápida del código inicial |
-| Reto intermedio único | 10–45' | Implementación real en el repo, a partir de `week-XX-start` |
-| Validación | 45–55' | Ejecutar tests, verificar pipeline verde, revisión rápida |
-| Cierre | 55–60' | Publicar `week-XX-solution`, puntos clave, dudas frecuentes |
+| Revisión de la solución anterior | 0–20' | Se muestra y explica `week-(XX-1)-solution`, se resuelven dudas del reto ya entregado |
+| Contexto + demo del reto nuevo | 20–40' | Qué vamos a mejorar, por qué importa, demo rápida del `week-XX-start` |
+| Q&A | 40–60' | Dudas sobre el reto de la semana antes de resolverlo entre semana |
+
+> El `week-XX-start` se publica el jueves de la sesión. El PR con el reto resuelto se entrega **antes del jueves siguiente**, cuando se revisa en vivo como `week-XX-solution`.
 
 ### Filosofía del código inicial (`week-XX-start`)
 

@@ -15,7 +15,6 @@ El código inicial tiene una clase que hace demasiado (viola SRP) y requiere mod
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: identificar SRP/OCP violations en código real |
-| 10–45' | Reto: refactorizar `OrderProcessor` (ver `enunciado.md`) |
-| 45–55' | Validación: tests en verde antes y después del refactor |
-| 55–60' | Cierre: `week-03-solution`, discusión de trade-offs |
+| 0–20' | Revisión `week-02-solution`: ciclo TDD, anti-patrones frecuentes |
+| 20–40' | Contexto + demo: identificar SRP/OCP violations en código real — refactorizar `OrderProcessor` (ver `enunciado.md`) |
+| 40–60' | Q&A sobre el reto (se resuelve entre semana, PR antes del jueves siguiente) |

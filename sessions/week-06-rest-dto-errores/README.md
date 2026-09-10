@@ -15,7 +15,6 @@ La API mal diseñada es la principal fuente de bugs difíciles de encontrar en p
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: API sin DTOs vs con DTOs, error sin handler vs con handler |
-| 10–45' | Reto: endpoint de creación de pedido con validación y errores (ver `enunciado.md`) |
-| 45–55' | Validación: tests con MockMvc, status codes correctos |
-| 55–60' | Cierre: `week-06-solution`, contrato de error estándar |
+| 0–20' | Revisión `week-05-solution`: anti-patrones de mocking |
+| 20–40' | Contexto + demo: API sin DTOs vs con DTOs, error sin handler vs con handler — endpoint de creación de pedido (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

@@ -15,7 +15,6 @@ Paginación incorrecta y ausencia de locking son las dos causas principales de b
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: query sin paginación que carga 50k registros, y race condition en inventario |
-| 10–45' | Reto: búsqueda paginada de productos con locking en reserva de stock |
-| 45–55' | Validación: tests con paginación verificada y test de concurrencia básico |
-| 55–60' | Cierre: `week-12-solution`, optimistic vs pessimistic locking |
+| 0–20' | Revisión `week-11-solution`: JOIN FETCH vs @EntityGraph vs batch |
+| 20–40' | Contexto + demo: query sin paginación que carga 50k registros, race condition en inventario — búsqueda paginada con locking (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

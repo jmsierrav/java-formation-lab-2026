@@ -15,7 +15,6 @@ Los tests de controller con `@SpringBootTest` tardan 15–30 segundos. Con `@Web
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: @SpringBootTest vs @WebMvcTest, diferencia de tiempo |
-| 10–45' | Reto: slice tests del controller de pedidos (ver `enunciado.md`) |
-| 45–55' | Validación: tests corriendo en <2s, todos los status codes verificados |
-| 55–60' | Cierre: `week-08-solution`, qué pertenece a WebMvcTest vs test unitario |
+| 0–20' | Revisión `week-07-solution`: 12-factor app aplicado |
+| 20–40' | Contexto + demo: @SpringBootTest vs @WebMvcTest, diferencia de tiempo — slice tests del controller de pedidos (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

@@ -15,7 +15,6 @@ El CI construye confianza en el código. El CD entrega ese código a los usuario
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: release pipeline en Azure DevOps, environments y approvals |
-| 10–45' | Reto: pipeline release dev → prod con aprobación (ver `enunciado.md`) |
-| 45–55' | Validación: deploy a dev automático, prod requiere aprobación |
-| 55–60' | Cierre: `week-16-solution`, estrategias de rollback |
+| 0–20' | Revisión `week-15-solution`: optimización de tiempos con cache |
+| 20–40' | Contexto + demo: release pipeline en Azure DevOps, environments y approvals — pipeline release dev → prod (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

@@ -19,7 +19,6 @@ Esta sesión es el punto de partida. No hay brecha crítica que atacar, pero sí
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo del repo: estructura, ramas week-start/solution, flujo de PR |
-| 10–45' | Reto: ver `enunciado.md` |
-| 45–55' | Validación: `mvn verify` + primer PR abierto |
-| 55–60' | Cierre: publicación de `week-01-solution`, dudas de entorno |
+| 0–20' | Demo del repo: estructura, ramas week-start/solution, flujo de PR (no hay sesión anterior que revisar) |
+| 20–40' | Contexto del reto: walkthrough de `enunciado.md` y el TODO en `TrackingIdGenerator` |
+| 40–60' | Q&A + verificar que todos ejecutan `mvn verify` localmente (el reto se resuelve entre semana, PR antes del jueves siguiente) |

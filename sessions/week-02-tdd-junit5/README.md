@@ -20,7 +20,6 @@ TDD es la disciplina con mayor retorno de inversión en calidad. En esta sesión
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: ciclo red-green-refactor en vivo con un ejemplo simple |
-| 10–45' | Reto: ver `enunciado.md` |
-| 45–55' | Validación: tests en verde + revisión de un PR en vivo |
-| 55–60' | Cierre: publicación de `week-02-solution`, anti-patrones frecuentes |
+| 0–20' | Revisión `week-01-solution`: `TrackingIdGenerator`, dudas de entorno/PR |
+| 20–40' | Contexto + demo: ciclo red-green-refactor con un ejemplo simple (ver `enunciado.md`) |
+| 40–60' | Q&A sobre el reto de TDD (se resuelve entre semana, PR antes del jueves siguiente) |

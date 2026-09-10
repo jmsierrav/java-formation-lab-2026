@@ -15,7 +15,6 @@ Los patrones Strategy y Factory son los más frecuentes en código Spring profes
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: Strategy vs if-else, Factory vs `new` directo |
-| 10–45' | Reto: sistema de envíos con estrategias (ver `enunciado.md`) |
-| 45–55' | Validación: tests de cada estrategia independientes |
-| 55–60' | Cierre: `week-04-solution`, cuándo NO usar estos patrones |
+| 0–20' | Revisión `week-03-solution`: refactor SRP/OCP, trade-offs |
+| 20–40' | Contexto + demo: Strategy vs if-else, Factory vs `new` directo — sistema de envíos con estrategias (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

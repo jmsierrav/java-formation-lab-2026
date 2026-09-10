@@ -15,7 +15,6 @@ El 80% de los bugs de producción relacionados con ORM vienen de mapeos incorrec
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: EAGER vs LAZY, mapeos que explotan en producción |
-| 10–45' | Reto: modelar Pedido/Producto/Cliente con relaciones correctas |
-| 45–55' | Validación: consultas sin LazyInitializationException |
-| 55–60' | Cierre: `week-09-solution`, reglas de oro de mapeo JPA |
+| 0–20' | Revisión `week-08-solution`: WebMvcTest vs test unitario |
+| 20–40' | Contexto + demo: EAGER vs LAZY, mapeos que explotan en producción — modelar Pedido/Producto/Cliente (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

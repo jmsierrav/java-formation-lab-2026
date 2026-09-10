@@ -15,7 +15,6 @@ Entender y aplicar correctamente `@Transactional`: propagación, rollback rules,
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: @Transactional self-invocation, rollback solo en RuntimeException |
-| 10–45' | Reto: transferencia bancaria con transacciones correctas |
-| 45–55' | Validación: tests con rollback verificado |
-| 55–60' | Cierre: `week-10-solution`, checklist de transacciones |
+| 0–20' | Revisión `week-09-solution`: reglas de oro de mapeo JPA |
+| 20–40' | Contexto + demo: @Transactional self-invocation, rollback solo en RuntimeException — transferencia bancaria (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

@@ -194,7 +194,7 @@ GitHub → Settings → Branches → week-*-start (protection rule)
 
 ## PASO 3 — Preparar la solución de referencia (NO publicar aún)
 
-La solución se publica en el minuto 55 de la sesión. Prepárala en local:
+La solución se publica al **inicio de la sesión de la semana 02** (segmento de revisión), no en esta sesión. Prepárala en local:
 
 ```bash
 git checkout -b week-01-solution upstream/week-01-start
@@ -303,7 +303,7 @@ cd sessions/week-01-kickoff
 # Guarda en local, NO hagas push todavía
 git add .
 git commit -m "feat: implementación de referencia TrackingIdGenerator"
-# NO: git push origin week-01-solution  ← publicar solo en minuto 55
+# NO: git push origin week-01-solution  ← publicar al inicio de la sesión de la semana 02
 ```
 
 ---
@@ -343,21 +343,25 @@ Repo: https://github.com/robinson8406/java-formation-lab-2026
 
 ## PASO 5 — Flujo de la sesión (script para formador)
 
-### 0–10' — Contexto + Demo del repo
+### 0–20' — Demo del repo + entorno
 
 ```
 Mostrar en pantalla:
 1. GitHub: estructura del repo → sessions/week-01-kickoff/
 2. Qué es una rama week-XX-start vs week-XX-solution
 3. Diagrama de fork (slides: presentacion-participantes.html → slide "¿Qué es un fork?")
-4. Mostrar el archivo enunciado.md en vivo
-5. Abrir TrackingIdGenerator.java → "esto es lo que van a implementar"
+4. Verificar en voz alta que todos tienen java -version → 21 y el fork listo
 ```
 
-### 10–45' — Reto en vivo
+No hay sesión anterior que revisar (es la sesión de arranque).
+
+### 20–40' — Contexto del reto
 
 ```
-Participantes ejecutan:
+1. Mostrar el archivo enunciado.md en vivo
+2. Abrir TrackingIdGenerator.java → "esto es lo que van a implementar"
+3. Abrir TrackingIdGeneratorTest.java → "estos tests deben pasar en verde"
+4. Mostrar el flujo esperado:
 
 git fetch upstream
 git checkout -b week-01/su-alias upstream/week-01-start
@@ -365,52 +369,18 @@ cd sessions/week-01-kickoff
 ./mvnw verify   ← falla en rojo: normal, ese es el punto de partida
 ```
 
-**Como formador, acompaña mostrando:**
-
-```bash
-# Mostrar en pantalla — flujo de trabajo
-git fetch upstream
-git checkout -b week-01/demo-formador upstream/week-01-start
-
-# Abrir TrackingIdGenerator.java en el IDE
-# Mostrar el TODO → "implementen esto"
-# Abrir TrackingIdGeneratorTest.java → "estos tests deben pasar en verde"
-```
-
-### 45–55' — Validación
+### 40–60' — Q&A + primer PR abierto (entre semana)
 
 ```
-Participante que terminó:
-  1. ./mvnw verify → BUILD SUCCESS
-  2. git push origin week-01/su-alias
-  3. Abrir PR en GitHub:
-     TU-ALIAS:week-01/su-alias → robinson8406:week-01-start
-  4. Mostrar en pantalla: Azure DevOps corre el pipeline automáticamente
-  5. Esperar ✅ en el PR de GitHub
+Recordar: el reto se resuelve ENTRE SEMANA, no en esta hora.
+PR debe abrirse antes del jueves siguiente:
+  TU-ALIAS:week-01/su-alias → robinson8406:week-01-start
+
+Responder dudas de entorno, fork, y del enunciado.
+Mostrar en pantalla cómo se ve un PR abierto y el pipeline de Azure DevOps corriendo automáticamente.
 ```
 
-**Mostrar en Azure DevOps:**
-```
-Pipelines → week-01-kickoff-ci → último run
-→ logs de mvn verify
-→ Test Results: X tests, 0 failures
-→ Code Coverage: XX%
-```
-
-### 55–60' — Cierre y solución de referencia
-
-```bash
-# AHORA sí: publicar la solución
-git push origin week-01-solution
-```
-
-```
-GitHub → ramas → week-01-solution disponible
-Mostrar la implementación de referencia en pantalla
-Destacar: SecureRandom (criterio de seguridad), Record de Java 21 (bonus)
-```
-
-**Badge flow (mostrar en vivo):**
+**Badge flow (se ejecuta cuando el participante entrega, no necesariamente en la sesión):**
 ```
 GitHub → Issues → New Issue
 Usar template: .github/ISSUE_TEMPLATE/badge-completado.md
@@ -418,6 +388,9 @@ Título: ✅ [week-01] su-alias completó la sesión
 Asignar label: ✅ completado
 Cerrar el issue
 → participante tiene su badge
+```
+
+> La solución de referencia (`week-01-solution`) se publica y revisa al **inicio de la sesión de la semana 02**, no al cierre de esta.
 ```
 
 ---

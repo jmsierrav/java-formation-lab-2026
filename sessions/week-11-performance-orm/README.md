@@ -15,7 +15,6 @@ El N+1 es el problema de performance más frecuente en aplicaciones con ORM. Es 
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: habilitar log de SQL, ver N+1 en acción con conteo de queries |
-| 10–45' | Reto: detectar y corregir N+1 en listado de órdenes (ver `enunciado.md`) |
-| 45–55' | Validación: conteo de queries antes vs después |
-| 55–60' | Cierre: `week-11-solution`, cuándo usar JOIN FETCH vs @EntityGraph vs batch |
+| 0–20' | Revisión `week-10-solution`: checklist de transacciones |
+| 20–40' | Contexto + demo: habilitar log de SQL, ver N+1 en acción — detectar y corregir N+1 en listado de órdenes (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

@@ -15,7 +15,6 @@ Un sistema sin observabilidad es una caja negra. Esta sesión cierra el ciclo: l
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: buscar un error en producción sin correlation ID vs con él |
-| 10–45' | Reto: correlation ID + métricas + Application Insights |
-| 45–55' | Validación: traza completa de una request en Application Insights |
-| 55–60' | Cierre: `week-18-solution`, retrospectiva del plan 2026, próximos pasos |
+| 0–20' | Revisión `week-17-solution`: costos y buenas prácticas |
+| 20–40' | Contexto + demo: buscar un error en producción sin correlation ID vs con él — correlation ID + métricas + Application Insights (ver `enunciado.md`) |
+| 40–60' | Q&A + retrospectiva del plan 2026, próximos pasos |

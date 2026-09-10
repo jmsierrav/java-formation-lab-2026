@@ -15,7 +15,6 @@ El anti-patrón más frecuente en la comunidad: tests que mockean todo y verific
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: test frágil vs test robusto con Mockito |
-| 10–45' | Reto: testear `PaymentService` mockeando dependencias externas |
-| 45–55' | Validación: tests pasan, discusión de qué mockear y qué no |
-| 55–60' | Cierre: `week-05-solution`, lista de anti-patrones |
+| 0–20' | Revisión `week-04-solution`: patrones Strategy/Factory, cuándo NO usarlos |
+| 20–40' | Contexto + demo: test frágil vs test robusto con Mockito — testear `PaymentService` (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

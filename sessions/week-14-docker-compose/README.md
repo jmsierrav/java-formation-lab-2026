@@ -17,7 +17,6 @@ Contenerizar la aplicación Spring Boot y orquestar el stack completo (app + bas
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: `podman run` vs `podman compose up`, layers en Containerfile |
-| 10–45' | Reto: Containerfile multi-stage + compose con app + Postgres |
-| 45–55' | Validación: `podman compose up` arranca todo, health checks pasan |
-| 55–60' | Cierre: `week-14-solution`, optimización de layers y tamaño de imagen |
+| 0–20' | Revisión `week-13-solution`: cuándo NO microservicios |
+| 20–40' | Contexto + demo: `podman run` vs `podman compose up`, layers en Containerfile — Containerfile multi-stage + compose (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

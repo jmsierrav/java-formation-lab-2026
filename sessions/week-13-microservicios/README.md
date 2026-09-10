@@ -15,7 +15,6 @@ El error más frecuente: microservicios que son monolitos distribuidos — misma
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: monolito distribuido vs microservicio real, bounded context |
-| 10–45' | Reto: extraer el módulo de notificaciones como microservicio |
-| 45–55' | Validación: servicio arranca independiente, contrato REST documentado |
-| 55–60' | Cierre: `week-13-solution`, cuándo NO microservicios |
+| 0–20' | Revisión `week-12-solution`: optimistic vs pessimistic locking |
+| 20–40' | Contexto + demo: monolito distribuido vs microservicio real, bounded context — extraer módulo de notificaciones (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

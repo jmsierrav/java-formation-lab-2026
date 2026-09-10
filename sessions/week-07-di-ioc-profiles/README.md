@@ -15,7 +15,6 @@ El error más frecuente en proyectos: configuración hardcodeada, beans que se c
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: @Autowired en campo vs constructor, profiles en acción |
-| 10–45' | Reto: configurar beans distintos por perfil (ver `enunciado.md`) |
-| 45–55' | Validación: tests con `@ActiveProfiles`, beans correctos por entorno |
-| 55–60' | Cierre: `week-07-solution`, 12-factor app aplicado |
+| 0–20' | Revisión `week-06-solution`: contrato de error estándar |
+| 20–40' | Contexto + demo: @Autowired en campo vs constructor, profiles en acción — configurar beans por perfil (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

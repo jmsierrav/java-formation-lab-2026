@@ -15,7 +15,6 @@ App Service es el servicio más accesible para desplegar aplicaciones Java en Az
 
 | Tiempo | Actividad |
 |--------|-----------|
-| 0–10' | Demo: App Service plan, deployment slots, Application Settings vs código |
-| 10–45' | Reto: deploy seguro con slot de staging y swap a producción |
-| 45–55' | Validación: app viva en Azure, logs accesibles, secretos no visibles en el repo |
-| 55–60' | Cierre: `week-17-solution`, costos y buenas prácticas |
+| 0–20' | Revisión `week-16-solution`: estrategias de rollback |
+| 20–40' | Contexto + demo: App Service plan, deployment slots, Application Settings vs código — deploy seguro con slot de staging (ver `enunciado.md`) |
+| 40–60' | Q&A (se resuelve entre semana, PR antes del jueves siguiente) |

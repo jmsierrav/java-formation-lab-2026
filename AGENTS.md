@@ -52,12 +52,15 @@ Azure DevOps, Docker, Hibernate, Microservicios, JUnit, Mockito, Patrones de dis
 ---
 
 ## Formato de sesión (1 hora, jueves)
+El reto ya no se resuelve en vivo: se resuelve entre semana y se revisa la sesión siguiente.
+
 | Segmento | Tiempo | Contenido |
 |----------|--------|-----------|
-| Contexto + demo | 0–10' | Qué vamos a mejorar y por qué |
-| Reto intermedio único | 10–45' | Implementación real en el repo |
-| Validación | 45–55' | Tests + pipeline verde |
-| Cierre | 55–60' | Solución de referencia publicada en `week-xx-solution` |
+| Revisión solución anterior | 0–20' | Se muestra y explica `week-(XX-1)-solution`, dudas del reto ya entregado |
+| Contexto + demo del reto nuevo | 20–40' | Qué vamos a mejorar, por qué, demo del `week-xx-start` |
+| Q&A | 40–60' | Dudas sobre el reto de la semana antes de resolverlo entre semana |
+
+> `week-xx-start` se publica el jueves de la sesión; PR se entrega antes del jueves siguiente, donde se revisa como `week-xx-solution`.
 
 ---
 
