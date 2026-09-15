@@ -1,18 +1,30 @@
 package com.indra.logistics.base.factory;
 
 
+import com.indra.logistics.base.UnknownPaymentMethodException;
+import com.indra.logistics.base.strategy.*;
 import org.springframework.stereotype.Component;
-
-import com.indra.logistics.base.strategy.PaymentStrategy;
 
 /** Factory */
 @Component
 public class PaymentStrategyFactoryImpl implements PaymentStrategyFactory {
 
-   
     @Override
     public PaymentStrategy getStrategy(String methodCode) { 
-       //TODO: Implementar lógica de selección de estrategia según el código del método de pago
-       return null;
+       if (null == methodCode) {
+           throw new UnknownPaymentMethodException("null");
+       }
+
+        return switch (methodCode) {
+            case "AMEX" -> new AmexPayment();
+            case "BANK_TRANSFER" -> new BankTransferPayment();
+            case "CASH" -> new CashPayment();
+            case "DEBIT_CARD" -> new DebitcardPayment();
+            case "MASTERCARD" -> new MastercardPayment();
+            case "PAYPAL" -> new PaypalPayment();
+            case "VISA" -> new VisaPayment();
+            default -> throw new UnknownPaymentMethodException(methodCode);
+        };
     }
+
 }

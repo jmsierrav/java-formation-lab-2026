@@ -19,8 +19,8 @@ class PaymentControllerTest {
 
         assertEquals("CASH", result.method());
         assertEquals(new BigDecimal("100"), result.amount());
-        assertEquals(new BigDecimal("0.00"), result.fee());
-        assertEquals(new BigDecimal("100.00"), result.total());
+        assertEquals(new BigDecimal("0.00"), result.fee().amount());
+        assertEquals(new BigDecimal("100.00"), result.total().amount());
         assertEquals("Pago en efectivo registrado, sin comisión.", result.message());
     }
 
@@ -29,8 +29,8 @@ class PaymentControllerTest {
         PaymentResult result = paymentController.getFee("VISA", new BigDecimal("200.00"));
 
         assertEquals("VISA", result.method());
-        assertEquals(new BigDecimal("7.00"), result.fee());
-        assertEquals(new BigDecimal("207.00"), result.total());
+        assertEquals(new BigDecimal("7.00"), result.fee().amount());
+        assertEquals(new BigDecimal("207.00"), result.total().amount());
         assertEquals("Pago con tarjeta de crédito Visa procesado, se aplica comisión bancaria.", result.message());
     }
 
