@@ -1,13 +1,30 @@
 package com.indra.logistics.base.factory;
 
-
 import com.indra.logistics.base.UnknownPaymentMethodException;
 import com.indra.logistics.base.strategy.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /** Factory */
 @Component
 public class PaymentStrategyFactoryImpl implements PaymentStrategyFactory {
+
+    private final List<PaymentStrategy> strategies;
+
+    @Autowired
+    public PaymentStrategyFactoryImpl() {
+        this.strategies = List.of(
+                new CashPayment(),
+                new VisaPayment(),
+                new MastercardPayment(),
+                new AmexPayment(),
+                new PaypalPayment(),
+                new BankTransferPayment(),
+                new DebitcardPayment()
+        );
+    }
 
     @Override
     public PaymentStrategy getStrategy(String methodCode) { 
@@ -15,16 +32,10 @@ public class PaymentStrategyFactoryImpl implements PaymentStrategyFactory {
            throw new UnknownPaymentMethodException("null");
        }
 
-        return switch (methodCode) {
-            case "AMEX" -> new AmexPayment();
-            case "BANK_TRANSFER" -> new BankTransferPayment();
-            case "CASH" -> new CashPayment();
-            case "DEBIT_CARD" -> new DebitcardPayment();
-            case "MASTERCARD" -> new MastercardPayment();
-            case "PAYPAL" -> new PaypalPayment();
-            case "VISA" -> new VisaPayment();
-            default -> throw new UnknownPaymentMethodException(methodCode);
-        };
+        return strategies.stream()
+                .filter(strategy -> strategy.methodCode().equals(methodCode))
+                .findFirst()
+                .orElseThrow(() -> new UnknownPaymentMethodException(methodCode));
     }
 
 }

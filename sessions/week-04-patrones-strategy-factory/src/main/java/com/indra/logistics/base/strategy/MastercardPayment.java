@@ -1,10 +1,12 @@
 package com.indra.logistics.base.strategy;
 
 import com.indra.logistics.base.Money;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Component
 public class MastercardPayment implements PaymentStrategy {
 
     private String message;
