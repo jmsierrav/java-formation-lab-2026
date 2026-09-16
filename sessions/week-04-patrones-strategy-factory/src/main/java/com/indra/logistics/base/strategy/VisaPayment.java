@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class VisaPayment implements PaymentStrategy {
-
-    private String message;
+public class VisaPayment extends AbstractCreditCardPayment {
 
     @Override
     public String methodCode() {
@@ -16,28 +14,18 @@ public class VisaPayment implements PaymentStrategy {
     }
 
     @Override
-    public Money calculateFee(BigDecimal amount) {
-        Money fee;
-
-        if (amount.compareTo(BigDecimal.valueOf(100)) < 0) {
-            fee = Money.of(BigDecimal.ZERO);
-            message = "Pago con tarjeta de crédito Visa procesado, monto no aplica comisión bancaria.";
-        } else {
-            var tariff = creditCardTariff().add(new BigDecimal("0.005"));
-            fee = Money.of(amount.multiply(tariff));
-            message = "Pago con tarjeta de crédito Visa procesado, se aplica comisión bancaria.";
-        }
-
-        return fee;
+    protected BigDecimal additionalTariff() {
+        return new BigDecimal("0.005");
     }
 
     @Override
-    public String confirmationMessage() {
-        return message;
+    protected String noCommissionMessage() {
+        return "Pago con tarjeta de crédito Visa procesado, monto no aplica comisión bancaria.";
     }
 
-    private BigDecimal creditCardTariff() {
-        return new BigDecimal("0.03");
+    @Override
+    protected String commissionAppliedMessage() {
+        return "Pago con tarjeta de crédito Visa procesado, se aplica comisión bancaria.";
     }
 
 }
