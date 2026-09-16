@@ -2,6 +2,7 @@ package com.indra.logistics.base;
 
 import com.indra.logistics.base.factory.PaymentStrategyFactory;
 import com.indra.logistics.base.factory.PaymentStrategyFactoryImpl;
+import com.indra.logistics.base.strategy.LoggingPaymentDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class PaymentService {
 
     public PaymentResult process(PaymentRequest request) {
         var method = request.method();
-        var paymentStrategy = paymentStrategyFactory.getStrategy(method);
+        var paymentStrategy = new LoggingPaymentDecorator(paymentStrategyFactory.getStrategy(method));
 
         var amount = request.amount();
         var fee = paymentStrategy.calculateFee(amount);
