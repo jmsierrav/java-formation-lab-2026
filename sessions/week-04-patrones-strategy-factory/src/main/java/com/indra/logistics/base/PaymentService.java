@@ -1,7 +1,6 @@
 package com.indra.logistics.base;
 
 import com.indra.logistics.base.factory.PaymentStrategyFactory;
-import com.indra.logistics.base.factory.PaymentStrategyFactoryImpl;
 import com.indra.logistics.base.strategy.LoggingPaymentDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,6 @@ import org.springframework.stereotype.Service;
 public class PaymentService {
 
     private final PaymentStrategyFactory paymentStrategyFactory;
-
-    public PaymentService() {
-        this(new PaymentStrategyFactoryImpl());
-    }
 
     @Autowired
     public PaymentService(PaymentStrategyFactory paymentStrategyFactory) {

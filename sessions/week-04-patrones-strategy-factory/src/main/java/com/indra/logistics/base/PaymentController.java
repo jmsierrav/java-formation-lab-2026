@@ -11,15 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.Map;
 
-
 @RestController
 public class PaymentController {
 
     private final PaymentService paymentService;
-
-    public PaymentController() {
-        this(new PaymentService());
-    }
 
     @Autowired
     public PaymentController(PaymentService paymentService) {

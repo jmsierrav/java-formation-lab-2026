@@ -1,17 +1,21 @@
 package com.indra.logistics.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.math.BigDecimal;
-import java.util.Map;
-
+import com.indra.logistics.base.factory.PaymentStrategyFactory;
+import com.indra.logistics.base.factory.PaymentStrategyFactoryImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class PaymentControllerTest {
 
-    private final PaymentController paymentController = new PaymentController();
+    private final PaymentStrategyFactory paymentStrategyFactory = new PaymentStrategyFactoryImpl();
+    private final PaymentService paymentService = new PaymentService(paymentStrategyFactory);
+    private final PaymentController paymentController = new PaymentController(paymentService);
 
     @Test
     void getFee_PaymentMethodWithoutAmount_Success() {
