@@ -1,0 +1,39 @@
+package com.indra.logistics.base;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+@RestController
+public class PaymentController {
+
+    private final PaymentService paymentService;
+
+    @Autowired
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+
+    @GetMapping("/payments/{paymentMethod}")
+    public PaymentResult getFee(@PathVariable String paymentMethod) {
+        return getFee(paymentMethod, BigDecimal.valueOf(100));
+    }
+
+    @GetMapping("/payments/{paymentMethod}/{amount}")
+    public PaymentResult getFee(@PathVariable String paymentMethod, @PathVariable BigDecimal amount) {
+        return paymentService.process(new PaymentRequest(amount, paymentMethod));
+    }
+
+    @ExceptionHandler(UnknownPaymentMethodException.class)
+    public ResponseEntity<Map<String, String>> handleUnknownMethod(UnknownPaymentMethodException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
+    }
+
+}
