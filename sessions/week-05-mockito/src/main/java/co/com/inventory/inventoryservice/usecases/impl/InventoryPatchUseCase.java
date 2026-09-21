@@ -12,12 +12,15 @@ import java.util.List;
 @Service
 public class InventoryPatchUseCase implements IInventoryPatchUseCase {
 
+    private final IInventoryService service;
+
     @Autowired
-    IInventoryService service ;
+    public InventoryPatchUseCase(IInventoryService service){
+        this.service = service ;
+    }
 
     @Override
     public void update(String id, ProductDto productDto) throws IllegalStateException, IllegalArgumentException {
-
         if(id == null || productDto == null)
             throw new IllegalArgumentException("El registro no esta especificado para actualizar!");
 
@@ -28,22 +31,22 @@ public class InventoryPatchUseCase implements IInventoryPatchUseCase {
         }
 
         if(productDto.getDescription() != null){
-            producto.get(0).setDescription(productDto.getDescription());
+            producto.getFirst().setDescription(productDto.getDescription());
         }
 
         if(productDto.getName() != null){
-            producto.get(0).setName(productDto.getName());
+            producto.getFirst().setName(productDto.getName());
         }
 
         if(productDto.getUnits() != null){
-            producto.get(0).setUnits(productDto.getUnits());
+            producto.getFirst().setUnits(productDto.getUnits());
         }
 
         if(productDto.getQuantity() != null){
-            producto.get(0).setQuantity(productDto.getQuantity());
+            producto.getFirst().setQuantity(productDto.getQuantity());
         }
 
-        service.update(producto.get(0));
-
+        service.update(producto.getFirst());
     }
+
 }

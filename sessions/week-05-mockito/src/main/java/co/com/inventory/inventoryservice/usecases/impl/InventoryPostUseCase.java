@@ -6,15 +6,18 @@ import co.com.inventory.inventoryservice.usecases.IInventoryPostUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class InventoryPostUseCase implements IInventoryPostUseCase {
 
+    private final IInventoryService service;
+
     @Autowired
-    IInventoryService service ;
+    public InventoryPostUseCase(IInventoryService service){
+        this.service = service ;
+    }
 
     @Override
     public String create(ProductDto productDto) throws IllegalStateException, IllegalArgumentException {
@@ -26,7 +29,7 @@ public class InventoryPostUseCase implements IInventoryPostUseCase {
             throw new IllegalArgumentException("El nombre del producto se encuentra vacío!") ;
         }
 
-        List<ProductDto> products = new ArrayList<>();
+        List<ProductDto> products;
 
         if(productDto.getId() != null){
             products = service.getById(productDto.getId());
@@ -47,6 +50,6 @@ public class InventoryPostUseCase implements IInventoryPostUseCase {
         productDto.setId(id);
 
         return service.create(productDto);
-
     }
+
 }
