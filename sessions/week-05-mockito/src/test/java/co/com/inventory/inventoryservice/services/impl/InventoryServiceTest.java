@@ -18,56 +18,47 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-        import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-// PASO 1
-// Debes agregar la extension de Mockito
-
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Pruebas unitarias para InventoryService")
 class InventoryServiceTest {
 
-    // PASO 2
-    // Este es el MOCK
-    
+    @Mock
     private ICatalogRepository repository;
 
-    // PASO 3
-    // Este es la clase que vamos a testear apoyándonos de MOCK
-    
+    @InjectMocks
     private InventoryService inventoryService;
 
-    private ProductDto productDto;
+    private ProductDto productDtoA;
     private Product product;
 
     @BeforeEach
     void setUp() {
-        productDto = new ProductDto();
-        productDto.setId("1");
-        productDto.setName("Producto A");
-        // ajusta setters según los campos reales de ProductDto
+        productDtoA = new ProductDto();
+        productDtoA.setId("1");
+        productDtoA.setName("Producto A");
 
         product = new Product();
         product.setId("1");
         product.setName("Producto A");
-        // ajusta setters según los campos reales de Product
     }
 
     // ----------------------------------------------------------------
     // CREATE
     // ----------------------------------------------------------------
     @Nested
-    @DisplayName("create")
+    @DisplayName("Create product")
     class CreateTests {
 
         @Test
         @DisplayName("Debe retornar el id del producto cuando la creación es exitosa")
         void create_validProduct_returnsId() {
-            // PASO 4.1
-            // Adicionar el paso WHEN
-            
+            when(repository.save(any(Product.class))).thenReturn(product);
 
-            String result = inventoryService.create(productDto);
+            String result = inventoryService.create(productDtoA);
 
             assertEquals("1", result);
             verify(repository, times(1)).save(any(Product.class));
@@ -76,10 +67,10 @@ class InventoryServiceTest {
         @Test
         @DisplayName("Debe lanzar IllegalStateException cuando el repositorio falla")
         void create_repositoryThrowsException_throwsIllegalStateException() {
-            when(repository.save(any(Product.class))).thenThrow(new RuntimeException("db error"));
+            when(repository.save(any(Product.class))).thenThrow(new RuntimeException("DB error"));
 
             IllegalStateException ex = assertThrows(IllegalStateException.class,
-                    () -> inventoryService.create(productDto));
+                    () -> inventoryService.create(productDtoA));
 
             assertEquals("Proceso de creación NO exitoso!", ex.getMessage());
             verify(repository, times(1)).save(any(Product.class));
@@ -88,8 +79,7 @@ class InventoryServiceTest {
         @Test
         @DisplayName("Debe lanzar IllegalStateException cuando el mapeo falla (productDto null)")
         void create_nullProductDto_throwsIllegalStateException() {
-            assertThrows(IllegalStateException.class,
-                    () -> inventoryService.create(null));
+            assertThrows(IllegalStateException.class, () -> inventoryService.create(null));
 
             verify(repository, never()).save(any());
         }
@@ -99,7 +89,7 @@ class InventoryServiceTest {
     // UPDATE
     // ----------------------------------------------------------------
     @Nested
-    @DisplayName("update")
+    @DisplayName("Update product")
     class UpdateTests {
 
         @Test
@@ -107,11 +97,9 @@ class InventoryServiceTest {
         void update_validProduct_completesSuccessfully() {
             when(repository.save(any(Product.class))).thenReturn(product);
 
-            assertDoesNotThrow(() -> inventoryService.update(productDto));
+            assertDoesNotThrow(() -> inventoryService.update(productDtoA));
 
-            // PASO 4.2
-            // Implementar la sentencia verify para indicar que la actualizacion fue exitosa
-            
+            verify(repository, times(1)).save(any(Product.class));
         }
 
         @Test
@@ -120,17 +108,16 @@ class InventoryServiceTest {
             when(repository.save(any(Product.class))).thenThrow(new RuntimeException("db error"));
 
             IllegalStateException ex = assertThrows(IllegalStateException.class,
-                    () -> inventoryService.update(productDto));
+                    () -> inventoryService.update(productDtoA));
 
-            assertEquals("Proceso de actualizacion NO exitoso!", ex.getMessage());
+            assertEquals("Proceso de actualización NO exitoso!", ex.getMessage());
             verify(repository, times(1)).save(any(Product.class));
         }
 
         @Test
         @DisplayName("Debe lanzar IllegalStateException cuando el mapeo falla (productDto null)")
         void update_nullProductDto_throwsIllegalStateException() {
-            assertThrows(IllegalStateException.class,
-                    () -> inventoryService.update(null));
+            assertThrows(IllegalStateException.class, () -> inventoryService.update(null));
 
             verify(repository, never()).save(any());
         }
@@ -140,19 +127,18 @@ class InventoryServiceTest {
     // GET BY ID
     // ----------------------------------------------------------------
     @Nested
-    @DisplayName("getById")
+    @DisplayName("Get product by ID")
     class GetByIdTests {
 
         @Test
         @DisplayName("Debe retornar una lista con un elemento cuando el producto existe")
         void getById_existingId_returnsListWithOneElement() {
-            // PASO 4.3
-            // Agregar el WHEN
-            
+            when(repository.findById(anyString())).thenReturn(Optional.of(product));
+
             List<ProductDto> result = inventoryService.getById("1");
 
             assertEquals(1, result.size());
-            assertEquals("1", result.get(0).getId());
+            assertEquals("1", result.getFirst().getId());
             verify(repository, times(1)).findById("1");
         }
 
@@ -172,18 +158,18 @@ class InventoryServiceTest {
     // GET BY NAME
     // ----------------------------------------------------------------
     @Nested
-    @DisplayName("getByName")
+    @DisplayName("Get product by name")
     class GetByNameTests {
 
         @Test
         @DisplayName("Debe retornar la lista mapeada cuando existen resultados")
         void getByName_existingResults_returnsMappedList() {
-            when(repository.findByName("Producto A")).thenReturn(Arrays.asList(product));
+            when(repository.findByName("Producto A")).thenReturn(List.of(product));
 
             List<ProductDto> result = inventoryService.getByName("Producto A");
 
             assertEquals(1, result.size());
-            assertEquals("Producto A", result.get(0).getName());
+            assertEquals("Producto A", result.getFirst().getName());
             verify(repository, times(1)).findByName("Producto A");
         }
 
@@ -203,7 +189,7 @@ class InventoryServiceTest {
     // GET ALL
     // ----------------------------------------------------------------
     @Nested
-    @DisplayName("getAll")
+    @DisplayName("Get all products")
     class GetAllTests {
 
         @Test
@@ -232,4 +218,5 @@ class InventoryServiceTest {
             verify(repository, times(1)).findAll();
         }
     }
+
 }
