@@ -7,8 +7,6 @@ import java.util.Map;
 
 public interface IInventoryGetUseCase {
 
-    public List<ProductDto> read(Map<String, String> pathVariables) ;
-
-
+    List<ProductDto> read(Map<String, String> pathVariables);
 
 }

@@ -175,7 +175,7 @@ class InventoryControllerTest {
         void put_validProduct_returnsAccepted() {
             doNothing().when(putUseCase).update(product);
 
-            ResponseEntity<Void> response = controller.put(product);
+            ResponseEntity<String> response = controller.put(product);
 
             assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
             verify(putUseCase, times(1)).update(product);
@@ -184,7 +184,7 @@ class InventoryControllerTest {
         @Test
         @DisplayName("Debe retornar 400 BAD_REQUEST cuando el producto es null")
         void put_nullProduct_returnsBadRequest() {
-            ResponseEntity<Void> response = controller.put(null);
+            ResponseEntity<String> response = controller.put(null);
 
             assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
             verify(putUseCase, never()).update(any());
@@ -195,7 +195,7 @@ class InventoryControllerTest {
         void put_useCaseThrowsException_returnsNotAcceptable() {
             doThrow(new RuntimeException("error")).when(putUseCase).update(product);
 
-            ResponseEntity<Void> response = controller.put(product);
+            ResponseEntity<String> response = controller.put(product);
 
             assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
             verify(putUseCase, times(1)).update(product);

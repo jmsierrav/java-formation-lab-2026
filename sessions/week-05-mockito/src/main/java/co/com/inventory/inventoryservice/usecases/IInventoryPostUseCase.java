@@ -4,7 +4,6 @@ import co.com.inventory.inventoryservice.models.ProductDto;
 
 public interface IInventoryPostUseCase {
 
-    public String create(ProductDto productDto) throws IllegalStateException, IllegalArgumentException ;
-
+    String create(ProductDto productDto) throws IllegalStateException, IllegalArgumentException ;
 
 }
