@@ -1,0 +1,222 @@
+package co.com.inventory.inventoryservice.services.impl;
+
+import co.com.inventory.inventoryservice.entities.Product;
+import co.com.inventory.inventoryservice.models.ProductDto;
+import co.com.inventory.inventoryservice.repositories.ICatalogRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Pruebas unitarias para InventoryService")
+class InventoryServiceTest {
+
+    @Mock
+    private ICatalogRepository repository;
+
+    @InjectMocks
+    private InventoryService inventoryService;
+
+    private ProductDto productDtoA;
+    private Product product;
+
+    @BeforeEach
+    void setUp() {
+        productDtoA = new ProductDto();
+        productDtoA.setId("1");
+        productDtoA.setName("Producto A");
+
+        product = new Product();
+        product.setId("1");
+        product.setName("Producto A");
+    }
+
+    // ----------------------------------------------------------------
+    // CREATE
+    // ----------------------------------------------------------------
+    @Nested
+    @DisplayName("Create product")
+    class CreateTests {
+
+        @Test
+        @DisplayName("Debe retornar el id del producto cuando la creación es exitosa")
+        void create_validProduct_returnsId() {
+            when(repository.save(any(Product.class))).thenReturn(product);
+
+            String result = inventoryService.create(productDtoA);
+
+            assertEquals("1", result);
+            verify(repository, times(1)).save(any(Product.class));
+        }
+
+        @Test
+        @DisplayName("Debe lanzar IllegalStateException cuando el repositorio falla")
+        void create_repositoryThrowsException_throwsIllegalStateException() {
+            when(repository.save(any(Product.class))).thenThrow(new RuntimeException("DB error"));
+
+            IllegalStateException ex = assertThrows(IllegalStateException.class,
+                    () -> inventoryService.create(productDtoA));
+
+            assertEquals("Proceso de creación NO exitoso!", ex.getMessage());
+            verify(repository, times(1)).save(any(Product.class));
+        }
+
+        @Test
+        @DisplayName("Debe lanzar IllegalStateException cuando el mapeo falla (productDto null)")
+        void create_nullProductDto_throwsIllegalStateException() {
+            assertThrows(IllegalStateException.class, () -> inventoryService.create(null));
+
+            verify(repository, never()).save(any());
+        }
+    }
+
+    // ----------------------------------------------------------------
+    // UPDATE
+    // ----------------------------------------------------------------
+    @Nested
+    @DisplayName("Update product")
+    class UpdateTests {
+
+        @Test
+        @DisplayName("Debe ejecutar la actualización sin lanzar excepción cuando es exitosa")
+        void update_validProduct_completesSuccessfully() {
+            when(repository.save(any(Product.class))).thenReturn(product);
+
+            assertDoesNotThrow(() -> inventoryService.update(productDtoA));
+
+            verify(repository, times(1)).save(any(Product.class));
+        }
+
+        @Test
+        @DisplayName("Debe lanzar IllegalStateException cuando el repositorio falla")
+        void update_repositoryThrowsException_throwsIllegalStateException() {
+            when(repository.save(any(Product.class))).thenThrow(new RuntimeException("db error"));
+
+            IllegalStateException ex = assertThrows(IllegalStateException.class,
+                    () -> inventoryService.update(productDtoA));
+
+            assertEquals("Proceso de actualización NO exitoso!", ex.getMessage());
+            verify(repository, times(1)).save(any(Product.class));
+        }
+
+        @Test
+        @DisplayName("Debe lanzar IllegalStateException cuando el mapeo falla (productDto null)")
+        void update_nullProductDto_throwsIllegalStateException() {
+            assertThrows(IllegalStateException.class, () -> inventoryService.update(null));
+
+            verify(repository, never()).save(any());
+        }
+    }
+
+    // ----------------------------------------------------------------
+    // GET BY ID
+    // ----------------------------------------------------------------
+    @Nested
+    @DisplayName("Get product by ID")
+    class GetByIdTests {
+
+        @Test
+        @DisplayName("Debe retornar una lista con un elemento cuando el producto existe")
+        void getById_existingId_returnsListWithOneElement() {
+            when(repository.findById(anyString())).thenReturn(Optional.of(product));
+
+            List<ProductDto> result = inventoryService.getById("1");
+
+            assertEquals(1, result.size());
+            assertEquals("1", result.getFirst().getId());
+            verify(repository, times(1)).findById("1");
+        }
+
+        @Test
+        @DisplayName("Debe retornar una lista vacía cuando el producto no existe")
+        void getById_nonExistingId_returnsEmptyList() {
+            when(repository.findById("999")).thenReturn(Optional.empty());
+
+            List<ProductDto> result = inventoryService.getById("999");
+
+            assertTrue(result.isEmpty());
+            verify(repository, times(1)).findById("999");
+        }
+    }
+
+    // ----------------------------------------------------------------
+    // GET BY NAME
+    // ----------------------------------------------------------------
+    @Nested
+    @DisplayName("Get product by name")
+    class GetByNameTests {
+
+        @Test
+        @DisplayName("Debe retornar la lista mapeada cuando existen resultados")
+        void getByName_existingResults_returnsMappedList() {
+            when(repository.findByName("Producto A")).thenReturn(List.of(product));
+
+            List<ProductDto> result = inventoryService.getByName("Producto A");
+
+            assertEquals(1, result.size());
+            assertEquals("Producto A", result.getFirst().getName());
+            verify(repository, times(1)).findByName("Producto A");
+        }
+
+        @Test
+        @DisplayName("Debe retornar una lista vacía cuando no hay resultados")
+        void getByName_noResults_returnsEmptyList() {
+            when(repository.findByName("Inexistente")).thenReturn(Collections.emptyList());
+
+            List<ProductDto> result = inventoryService.getByName("Inexistente");
+
+            assertTrue(result.isEmpty());
+            verify(repository, times(1)).findByName("Inexistente");
+        }
+    }
+
+    // ----------------------------------------------------------------
+    // GET ALL
+    // ----------------------------------------------------------------
+    @Nested
+    @DisplayName("Get all products")
+    class GetAllTests {
+
+        @Test
+        @DisplayName("Debe retornar la lista completa mapeada cuando hay productos")
+        void getAll_withResults_returnsMappedList() {
+            Product product2 = new Product();
+            product2.setId("2");
+            product2.setName("Producto B");
+
+            when(repository.findAll()).thenReturn(Arrays.asList(product, product2));
+
+            List<ProductDto> result = inventoryService.getAll();
+
+            assertEquals(2, result.size());
+            verify(repository, times(1)).findAll();
+        }
+
+        @Test
+        @DisplayName("Debe retornar una lista vacía cuando no hay productos")
+        void getAll_noResults_returnsEmptyList() {
+            when(repository.findAll()).thenReturn(Collections.emptyList());
+
+            List<ProductDto> result = inventoryService.getAll();
+
+            assertTrue(result.isEmpty());
+            verify(repository, times(1)).findAll();
+        }
+    }
+
+}
