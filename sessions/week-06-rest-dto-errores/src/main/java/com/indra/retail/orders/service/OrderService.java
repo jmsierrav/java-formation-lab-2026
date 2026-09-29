@@ -1,8 +1,15 @@
 package com.indra.retail.orders.service;
 
+import com.indra.retail.orders.dto.CreateOrderRequest;
+import com.indra.retail.orders.dto.OrderResponse;
+import com.indra.retail.orders.exception.OrderNotFoundException;
 import com.indra.retail.orders.model.Order;
+
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.indra.retail.orders.model.OrderItem;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,16 +17,25 @@ public class OrderService {
 
     private final Map<String, Order> orders = new ConcurrentHashMap<>();
 
-    public Order create(Order order) {
+    public OrderResponse create(CreateOrderRequest createOrderRequest) {
+        List<OrderItem> items = createOrderRequest.items().stream()
+                .map(item -> new OrderItem(item.sku(), item.quantity(), item.unitPrice()))
+                .toList();
+        var order = new Order(createOrderRequest.customerId(), items, createOrderRequest.deliveryAddress());
+
         orders.put(order.getId(), order);
-        return order;
+
+        return new OrderResponse(order.getId(), order.getStatus(), order.getTotalAmount(), order.getEstimatedDelivery());
     }
 
-    public Order findById(String orderId) {
-        Order order = orders.get(orderId);
+    public OrderResponse findById(String orderId) {
+        var order = orders.get(orderId);
+
         if (order == null) {
             throw new OrderNotFoundException(orderId);
         }
-        return order;
+
+        return new OrderResponse(order.getId(), order.getStatus(), order.getTotalAmount(), order.getEstimatedDelivery());
     }
+
 }
