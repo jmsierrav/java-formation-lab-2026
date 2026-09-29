@@ -1,6 +1,8 @@
 package com.indra.retail.orders.exception;
 
 import com.indra.retail.orders.dto.ErrorResponse;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,18 +17,40 @@ import java.util.List;
 @RestControllerAdvice
 public class OrderExceptionHandler {
 
+    private final MessageSource messageSource;
+
+    public OrderExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleOrderNotFound(OrderNotFoundException ex) {
         return buildResponse(
                 HttpStatus.NOT_FOUND,
-                List.of(ex.getMessage())
+                List.of(messageSource.getMessage(
+                        "api.error.order-not-found",
+                        new Object[]{ex.getOrderId()},
+                        LocaleContextHolder.getLocale()
+                ))
         );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         var errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .map(error -> messageSource.getMessage(
+                        "api.error.validation",
+                        new Object[]{
+                                messageSource.getMessage(
+                                        "api.field." + error.getField().replaceAll("\\[\\d+\\]", "[]"),
+                                        null,
+                                        error.getField(),
+                                        LocaleContextHolder.getLocale()
+                                ),
+                                error.getDefaultMessage()
+                        },
+                        LocaleContextHolder.getLocale()
+                ))
                 .toList();
 
         return buildResponse(HttpStatus.BAD_REQUEST, errors);
@@ -36,7 +60,11 @@ public class OrderExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnexpected(Exception ex) {
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                List.of("Ocurrió un error interno. Inténtalo de nuevo más tarde.")
+                List.of(messageSource.getMessage(
+                        "api.error.internal",
+                        null,
+                        LocaleContextHolder.getLocale()
+                ))
         );
     }
 

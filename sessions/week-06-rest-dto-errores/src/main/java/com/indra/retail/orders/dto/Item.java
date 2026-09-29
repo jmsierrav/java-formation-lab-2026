@@ -4,8 +4,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public record Item(
-        @NotBlank String sku,
-        @Min(1) int quantity,
-        @Min(0) double unitPrice
+        @NotBlank(message = "{validation.sku.required}") String sku,
+        @Min(value = 1, message = "{validation.quantity.minimum}") int quantity,
+        @Min(value = 0, message = "{validation.unit-price.minimum}") double unitPrice
 ) {
 }
