@@ -8,11 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import java.util.Locale;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,6 +29,9 @@ class OrderExceptionHandlerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private OrderExceptionHandler exceptionHandler;
 
     @MockBean
     private OrderService orderService;
@@ -68,6 +75,50 @@ class OrderExceptionHandlerTest {
                         org.hamcrest.Matchers.containsString("The order must contain at least one item."))))
                 .andExpect(jsonPath("$.errors", org.hamcrest.Matchers.hasItem(
                         org.hamcrest.Matchers.containsString("Delivery address"))));
+    }
+
+    @Test
+    void returnsStandardErrorForMalformedJson() throws Exception {
+        mockMvc.perform(post("/api/orders")
+                        .locale(Locale.forLanguageTag("es"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{ invalid json"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.errors[0]").value("El cuerpo JSON de la petición no es válido."));
+    }
+
+    @Test
+    void returnsStandardErrorForMissingRequestParameter() {
+        LocaleContextHolder.setLocale(Locale.forLanguageTag("es"));
+        try {
+            var response = exceptionHandler.handleMissingParameter(
+                    new MissingServletRequestParameterException("customerId", "String")
+            );
+
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(response.getBody()).isNotNull();
+            assertThat(response.getBody().timestamp()).isNotNull();
+            assertThat(response.getBody().status()).isEqualTo(400);
+            assertThat(response.getBody().errors())
+                    .containsExactly("Falta el parámetro requerido: customerId.");
+        } finally {
+            LocaleContextHolder.resetLocaleContext();
+        }
+    }
+
+    @Test
+    void returnsStandardErrorAndAllowedMethodsForUnsupportedMethod() throws Exception {
+        mockMvc.perform(post("/api/orders/missing")
+                        .locale(Locale.forLanguageTag("es")))
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(405))
+                .andExpect(jsonPath("$.errors[0]").value(
+                        "El método HTTP solicitado no está permitido para esta ruta."))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header()
+                        .string("Allow", org.hamcrest.Matchers.containsString("GET")));
     }
 
     @Test
