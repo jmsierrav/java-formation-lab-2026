@@ -3,7 +3,10 @@ package com.indra.retail.orders.exception;
 import com.indra.retail.orders.config.ApiLocaleConfiguration;
 import com.indra.retail.orders.service.OrderService;
 import com.indra.retail.orders.web.OrderController;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,6 +40,7 @@ class OrderExceptionHandlerTest {
     private OrderService orderService;
 
     @Test
+    @DisplayName("Devuelve los errores de validación de un pedido inválido")
     void returnsFieldErrorsForAnInvalidOrder() throws Exception {
         mockMvc.perform(post("/api/orders")
                         .locale(Locale.forLanguageTag("es"))
@@ -59,6 +63,7 @@ class OrderExceptionHandlerTest {
     }
 
     @Test
+    @DisplayName("Devuelve los mensajes de validación en el idioma solicitado")
     void returnsValidationMessagesInRequestedLanguage() throws Exception {
         mockMvc.perform(post("/api/orders")
                         .locale(Locale.ENGLISH)
@@ -78,6 +83,7 @@ class OrderExceptionHandlerTest {
     }
 
     @Test
+    @DisplayName("Devuelve un error estándar para JSON mal formado")
     void returnsStandardErrorForMalformedJson() throws Exception {
         mockMvc.perform(post("/api/orders")
                         .locale(Locale.forLanguageTag("es"))
@@ -90,6 +96,7 @@ class OrderExceptionHandlerTest {
     }
 
     @Test
+    @DisplayName("Devuelve un error estándar si falta un parámetro de solicitud")
     void returnsStandardErrorForMissingRequestParameter() {
         LocaleContextHolder.setLocale(Locale.forLanguageTag("es"));
         try {
@@ -109,6 +116,7 @@ class OrderExceptionHandlerTest {
     }
 
     @Test
+    @DisplayName("Devuelve un error estándar y los métodos permitidos para un método no soportado")
     void returnsStandardErrorAndAllowedMethodsForUnsupportedMethod() throws Exception {
         mockMvc.perform(post("/api/orders/missing")
                         .locale(Locale.forLanguageTag("es")))
@@ -122,6 +130,7 @@ class OrderExceptionHandlerTest {
     }
 
     @Test
+    @DisplayName("Devuelve mensajes localizados para los artículos inválidos del pedido")
     void returnsLocalizedMessagesForInvalidOrderItems() throws Exception {
         mockMvc.perform(post("/api/orders")
                         .locale(Locale.forLanguageTag("es"))
@@ -145,18 +154,7 @@ class OrderExceptionHandlerTest {
     }
 
     @Test
-    void returnsDescriptiveMessageWhenOrderDoesNotExist() throws Exception {
-        when(orderService.findById("missing")).thenThrow(new OrderNotFoundException("missing"));
-
-        mockMvc.perform(get("/api/orders/missing")
-                        .locale(Locale.forLanguageTag("es")))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.timestamp").exists())
-                .andExpect(jsonPath("$.status").value(404))
-                .andExpect(jsonPath("$.errors[0]").value("Pedido no encontrado: missing"));
-    }
-
-    @Test
+    @DisplayName("Oculta detalles internos ante errores inesperados")
     void returnsGenericMessageForUnexpectedErrors() throws Exception {
         when(orderService.findById("broken")).thenThrow(new IllegalStateException("sensitive detail"));
 
@@ -169,13 +167,21 @@ class OrderExceptionHandlerTest {
                 .andExpect(jsonPath("$.errors[0]").value(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("sensitive detail"))));
     }
 
-    @Test
-    void returnsNotFoundMessageInRequestedLanguage() throws Exception {
-        when(orderService.findById("missing")).thenThrow(new OrderNotFoundException("missing"));
+    @ParameterizedTest(name = "{0}: pedido {1}")
+    @CsvSource({
+            "es, missing, 'Pedido no encontrado: missing'",
+            "en, order-123, 'Order not found: order-123'"
+    })
+    @DisplayName("Devuelve el mensaje de pedido no encontrado en el idioma solicitado")
+    void returnsNotFoundMessageInRequestedLanguage(
+            String language, String orderId, String expectedMessage) throws Exception {
+        when(orderService.findById(orderId)).thenThrow(new OrderNotFoundException(orderId));
 
-        mockMvc.perform(get("/api/orders/missing")
-                        .locale(Locale.ENGLISH))
+        mockMvc.perform(get("/api/orders/{orderId}", orderId)
+                        .locale(Locale.forLanguageTag(language)))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.errors[0]").value("Order not found: missing"));
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.errors[0]").value(expectedMessage));
     }
 }
