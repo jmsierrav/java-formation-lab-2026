@@ -1,6 +1,8 @@
 package com.indra.retail.orders.exception;
 
 import com.indra.retail.orders.dto.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ import java.util.List;
 @RestControllerAdvice
 public class OrderExceptionHandler {
 
+    private static final Logger log = LoggerFactory.getLogger(OrderExceptionHandler.class);
+
     private final MessageSource messageSource;
 
     public OrderExceptionHandler(MessageSource messageSource) {
@@ -25,6 +29,7 @@ public class OrderExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleOrderNotFound(OrderNotFoundException ex) {
+        log.warn("Pedido no encontrado en la API: {}", ex.getOrderId(), ex);
         return buildResponse(
                 HttpStatus.NOT_FOUND,
                 List.of(messageSource.getMessage(
@@ -53,11 +58,14 @@ public class OrderExceptionHandler {
                 ))
                 .toList();
 
+        log.warn("La petición contiene errores de validación: {}", errors, ex);
+
         return buildResponse(HttpStatus.BAD_REQUEST, errors);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(Exception ex) {
+        log.error("Error interno no controlado en la API", ex);
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 List.of(messageSource.getMessage(
