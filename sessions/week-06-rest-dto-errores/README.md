@@ -5,6 +5,7 @@
 ## Objetivo
 
 Construir una API REST que sea **consistente y validada**: DTOs separados del modelo de dominio, validación con Bean Validation, y respuestas de error uniformes con `@ExceptionHandler`.
+Los mensajes de error están disponibles en español e inglés; la API negocia el idioma mediante `Accept-Language` y usa español por defecto.
 
 ## Contexto técnico
 

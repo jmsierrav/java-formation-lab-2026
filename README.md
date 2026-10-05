@@ -35,10 +35,10 @@ El nivel se evidencia en _cómo_ resolviste el problema — no en _qué_ problem
 |---|-------|---------|--------|--------|
 | 01 | 2026-08-20 | Arranque | Kickoff + setup Java 21 | ✅ |
 | 02 | 2026-08-27 | SOLID + TDD | TDD con JUnit 5 | ✅ |
-| 03 | 2026-09-03 | SOLID + TDD | SOLID (SRP/OCP) | ⏳ |
-| 04 | 2026-09-10 | SOLID + TDD | Patrones (Strategy/Factory) | ⏳ |
-| 05 | 2026-09-17 | SOLID + TDD | Mockito (buenas prácticas) | ⏳ |
-| 06 | 2026-09-24 | Spring Web / Testing | REST limpio (DTO/errores) | ⏳ |
+| 03 | 2026-09-03 | SOLID + TDD | SOLID (SRP/OCP) | ✅ |
+| 04 | 2026-09-10 | SOLID + TDD | Patrones (Strategy/Factory) | ✅ |
+| 05 | 2026-09-17 | SOLID + TDD | Mockito (buenas prácticas) | ✅ |
+| 06 | 2026-09-24 | Spring Web / Testing | REST limpio (DTO/errores) | ✅ |
 | 07 | 2026-10-01 | Spring Web / Testing | DI/IoC (profiles/wiring) | ⏳ |
 | 08 | 2026-10-08 | Spring Web / Testing | WebMvcTest (slice tests) | ⏳ |
 | 09 | 2026-10-15 | Hibernate / JPA | Mapeos JPA | ⏳ |
