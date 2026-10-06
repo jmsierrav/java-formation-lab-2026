@@ -2,11 +2,11 @@ package com.indra.notifications.infrastructure.adapters.email;
 
 import com.indra.notifications.application.ports.output.EmailSender;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("prod")
+@ConditionalOnProperty(prefix = "notification", name = "sender", havingValue = "smtp")
 public class SmtpEmailSender implements EmailSender {
 
     @Value("${notification.retry-attempts}")
