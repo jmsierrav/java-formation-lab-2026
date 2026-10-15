@@ -18,6 +18,7 @@ import com.indra.catalog.suppliers.application.SupplierService;
 import com.indra.catalog.suppliers.domain.InvalidSupplierException;
 import com.indra.catalog.suppliers.domain.Supplier;
 import com.indra.catalog.suppliers.domain.SupplierNotFoundException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -37,6 +38,7 @@ class SupplierControllerTest {
     private SupplierService supplierService;
 
     @Test
+    @DisplayName("Devuelve el proveedor sin notas internas cuando existe")
     void returnsSupplierWithoutInternalNotesWhenFound() throws Exception {
         Supplier supplier = new Supplier("SUP-001", "ACME LTDA", "900123456-7",
                 "compras@acme.co", "Datos internos");
@@ -54,6 +56,7 @@ class SupplierControllerTest {
     }
 
     @Test
+    @DisplayName("Devuelve 404 cuando el proveedor no existe")
     void returnsNotFoundWhenSupplierDoesNotExist() throws Exception {
         when(supplierService.findById("SUP-999")).thenThrow(new SupplierNotFoundException("SUP-999"));
 
@@ -63,6 +66,7 @@ class SupplierControllerTest {
     }
 
     @Test
+    @DisplayName("Delega la entrada sin modificar y devuelve el proveedor creado con su ubicación")
     void delegatesUnmodifiedInputAndReturnsCreatedSupplierWithLocation() throws Exception {
         CreateSupplierCommand command = new CreateSupplierCommand(
                 "  acme ltda ", "900.123.456-7", "compras@acme.co");
@@ -89,6 +93,7 @@ class SupplierControllerTest {
     }
 
     @Test
+    @DisplayName("Rechaza un nombre en blanco sin invocar el servicio")
     void rejectsBlankNameWithoutCallingService() throws Exception {
         mockMvc.perform(post("/api/suppliers")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,6 +111,7 @@ class SupplierControllerTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Rechaza cuerpos ausentes o inválidos sin invocar el servicio")
     @ValueSource(strings = {"", " ", "null", "{", "{}"})
     void rejectsMissingOrInvalidBodyWithoutCallingService(String body) throws Exception {
         mockMvc.perform(post("/api/suppliers")
@@ -117,6 +123,7 @@ class SupplierControllerTest {
     }
 
     @Test
+    @DisplayName("Devuelve un error seguro cuando ocurre una excepción inesperada")
     void returnsSafeErrorWhenAnUnexpectedExceptionOccurs() throws Exception {
         when(supplierService.findById("SUP-001"))
                 .thenThrow(new IllegalStateException("Database password=secret; host=internal-db"));
@@ -133,6 +140,7 @@ class SupplierControllerTest {
     }
 
     @Test
+    @DisplayName("Devuelve un error de validación cuando el dominio rechaza el proveedor")
     void returnsValidationErrorWhenDomainRejectsSupplier() throws Exception {
         CreateSupplierCommand command = new CreateSupplierCommand(
                 "ACME LTDA", ".........-7", "compras@acme.co");
@@ -151,6 +159,7 @@ class SupplierControllerTest {
     }
 
     @Test
+    @DisplayName("Elimina el proveedor y devuelve 204")
     void deletesSupplierAndReturnsNoContent() throws Exception {
         mockMvc.perform(delete("/api/suppliers/SUP-001"))
                 .andExpect(status().isNoContent())

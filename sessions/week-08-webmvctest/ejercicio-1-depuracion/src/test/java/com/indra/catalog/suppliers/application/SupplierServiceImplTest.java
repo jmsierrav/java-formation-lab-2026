@@ -14,6 +14,7 @@ import com.indra.catalog.suppliers.domain.SupplierNotFoundException;
 import com.indra.catalog.suppliers.domain.SupplierRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,6 +37,7 @@ class SupplierServiceImplTest {
     }
 
     @Test
+    @DisplayName("Normaliza nombre y NIT antes de guardar el proveedor")
     void normalizesNameAndTaxIdBeforeSavingSupplier() {
         when(repository.save(any(Supplier.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -51,6 +53,7 @@ class SupplierServiceImplTest {
     }
 
     @Test
+    @DisplayName("Asigna identificadores distintos a proveedores nuevos")
     void assignsDistinctIdsToNewSuppliers() {
         when(repository.save(any(Supplier.class))).thenAnswer(invocation -> invocation.getArgument(0));
         CreateSupplierCommand command = new CreateSupplierCommand("ACME", "900123456-7", "compras@acme.co");
@@ -63,6 +66,7 @@ class SupplierServiceImplTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Rechaza nombres vacíos sin invocar el repositorio")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t"})
     void rejectsMissingNameWithoutCallingRepository(String name) {
@@ -74,6 +78,7 @@ class SupplierServiceImplTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Rechaza NIT inválidos después de normalizarlos sin invocar el repositorio")
     @NullAndEmptySource
     @ValueSource(strings = {" ", ".........-7"})
     void rejectsInvalidTaxIdAfterNormalizationWithoutCallingRepository(String taxId) {
@@ -85,6 +90,7 @@ class SupplierServiceImplTest {
     }
 
     @Test
+    @DisplayName("Devuelve el proveedor encontrado por el repositorio")
     void returnsSupplierFoundByRepository() {
         Supplier supplier = new Supplier("SUP-001", "ACME", "900123456-7", "compras@acme.co", null);
         when(repository.findById("SUP-001")).thenReturn(Optional.of(supplier));
@@ -93,6 +99,7 @@ class SupplierServiceImplTest {
     }
 
     @Test
+    @DisplayName("Rechaza la búsqueda cuando el proveedor no existe")
     void rejectsLookupWhenSupplierDoesNotExist() {
         when(repository.findById("SUP-999")).thenReturn(Optional.empty());
 
@@ -101,6 +108,7 @@ class SupplierServiceImplTest {
     }
 
     @Test
+    @DisplayName("Elimina un proveedor existente")
     void deletesExistingSupplier() {
         when(repository.existsById("SUP-001")).thenReturn(true);
 
@@ -110,6 +118,7 @@ class SupplierServiceImplTest {
     }
 
     @Test
+    @DisplayName("Rechaza la eliminación cuando el proveedor no existe")
     void rejectsDeletionWhenSupplierDoesNotExist() {
         when(repository.existsById("SUP-999")).thenReturn(false);
 

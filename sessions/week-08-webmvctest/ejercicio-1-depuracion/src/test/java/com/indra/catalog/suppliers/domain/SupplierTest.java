@@ -3,6 +3,7 @@ package com.indra.catalog.suppliers.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 class SupplierTest {
 
     @Test
+    @DisplayName("Crea un proveedor con campos obligatorios y notas opcionales")
     void createsSupplierWithRequiredFieldsAndOptionalNotes() {
         Supplier supplier = new Supplier("SUP-001", "ACME", "900123456-7", "compras@acme.co", null);
 
@@ -22,6 +24,7 @@ class SupplierTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Rechaza campos obligatorios ausentes o en blanco")
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t"})
     void rejectsMissingRequiredFields(String value) {
@@ -36,6 +39,7 @@ class SupplierTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Rechaza NIT que no cumplen el formato canónico")
     @ValueSource(strings = {"900.123.456-7", ".........-7", "123-7", "9001234567"})
     void rejectsTaxIdOutsideCanonicalFormat(String taxId) {
         assertThatThrownBy(() -> new Supplier("SUP-001", "ACME", taxId, "compras@acme.co", null))
@@ -43,6 +47,7 @@ class SupplierTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Rechaza direcciones de correo mal formadas")
     @ValueSource(strings = {"compras", "@acme.co", "compras@", "compras@@acme.co", "compras @acme.co"})
     void rejectsMalformedEmail(String email) {
         assertThatThrownBy(() -> new Supplier("SUP-001", "ACME", "900123456-7", email, null))
