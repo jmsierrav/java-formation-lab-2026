@@ -89,6 +89,20 @@ Reglas de dependencia:
 
 ## Cómo ejecutarlo
 
+La autenticación requiere las variables `CATALOG_EDITOR_PASSWORD` y `CATALOG_ADMIN_PASSWORD`;
+no se incluyen credenciales por defecto. En PowerShell, configura secretos locales antes de iniciar:
+
+```powershell
+$editorSecret = Read-Host "Clave del usuario editor" -AsSecureString
+$adminSecret = Read-Host "Clave del usuario admin" -AsSecureString
+$env:CATALOG_EDITOR_PASSWORD = [System.Net.NetworkCredential]::new("", $editorSecret).Password
+$env:CATALOG_ADMIN_PASSWORD = [System.Net.NetworkCredential]::new("", $adminSecret).Password
+mvn -pl ejercicio-2-construccion spring-boot:run
+```
+
+En despliegues, inyecta ambas variables desde el gestor de secretos del entorno y sirve la API
+mediante HTTPS, ya que HTTP Basic transmite las credenciales en cada petición.
+
 ```bash
 cd sessions/week-08-webmvctest
 mvn -pl ejercicio-2-construccion verify
