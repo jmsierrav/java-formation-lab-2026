@@ -1,50 +1,24 @@
 package com.indra.catalog.suppliers.domain;
 
-public class Supplier {
+public record Supplier(String id, String name, String taxId, String email, String internalNotes) {
 
-    private String id;
-    private String name;
-    private String taxId;
-    private String email;
-    private String internalNotes;
-
-    public String getId() {
-        return id;
+    public Supplier {
+        requireNotBlank(id, "id");
+        requireNotBlank(name, "name");
+        requireNotBlank(taxId, "taxId");
+        requireNotBlank(email, "email");
+        if (!taxId.matches("[0-9]{9,11}-[0-9]")) {
+            throw new InvalidSupplierException("taxId: formato de NIT no valido");
+        }
+        if (!email.matches("[^\\s@]+@[^\\s@]+")) {
+            throw new InvalidSupplierException("email: formato de correo no valido");
+        }
     }
 
-    public void setId(String id) {
-        this.id = id;
+    private static void requireNotBlank(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new InvalidSupplierException(field + ": es obligatorio");
+        }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(String taxId) {
-        this.taxId = taxId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getInternalNotes() {
-        return internalNotes;
-    }
-
-    public void setInternalNotes(String internalNotes) {
-        this.internalNotes = internalNotes;
-    }
 }

@@ -21,3 +21,22 @@
 - **Causa raíz**: el método delete estaba devolviendo `ResponseEntity.ok().build()` en lugar de `ResponseEntity.noContent().build()`.
 - **Corrección**: cambié `ResponseEntity.ok().build()` por `ResponseEntity.noContent().build()` en el método delete de SupplierController.
 - **Prevención**: asegurarse de que los métodos de eliminación devuelvan el código de estado HTTP correcto (204 No Content) según las convenciones REST.
+
+## Refactors aplicados
+
+| Principio / práctica | Antes | Después | Test que lo respalda |
+|----------------------|-------|---------|---------------------|
+| DIP en web | Controller acoplado a `SupplierServiceImpl` | Constructor recibe `SupplierService`; el slice mockea la interfaz | `delegatesUnmodifiedInputAndReturnsCreatedSupplierWithLocation` |
+| DIP en aplicación | Servicio instancia `InMemorySupplierRepository` | Inyección de `SupplierRepository`; implementación registrada con `@Repository` | `SupplierServiceImplTest` usa un repositorio mock |
+| SRP | Controller normaliza datos y crea notas | Servicio normaliza con `Locale.ROOT`, asigna ID y notas; web solo adapta DTOs | `normalizesNameAndTaxIdBeforeSavingSupplier` |
+| Invariantes de dominio | Constructor vacío y setters permiten estados incompletos | `Supplier` inmutable y constructor con validación de campos requeridos, NIT canónico y estructura básica de correo | `SupplierTest` |
+| Errores seguros | 500 contiene `exception.toString()` | Mensaje público genérico y detalle técnico en log del servidor | `returnsSafeErrorWhenAnUnexpectedExceptionOccurs` |
+| Mapper sin framework | Bean sin estado que requiere `@Import` en el slice | Utilidad estática; eliminación del import y de la dependencia del constructor | `SupplierControllerTest` sin `@Import` |
+| Tests expresivos y robustos | `test1`...`test5`, JSON comparado como String y dependencia del orden de errores | Nombres de comportamiento, `jsonPath` y búsqueda de errores sin depender del índice | `returnsSupplierWithoutInternalNotesWhenFound`, `rejectsBlankNameWithoutCallingService` |
+| Body inválido | No se verifica delegación; el catch genérico convierte errores de lectura en 500 | Handler de body ausente/ilegible devuelve 400 y no invoca el servicio | `rejectsMissingOrInvalidBodyWithoutCallingService` |
+| Validación tras normalizar | El patrón web permite un NIT compuesto solo de puntos | El dominio rechaza el NIT inválido antes de persistir y la web lo traduce a 400 | `rejectsInvalidTaxIdAfterNormalizationWithoutCallingRepository`, `returnsValidationErrorWhenDomainRejectsSupplier` |
+
+La prueba de normalización pertenece a aplicación porque es una regla compartida por cualquier
+entrada al caso de uso. El slice no ejecuta esa regla: verifica que los datos originales llegan al
+servicio y que la respuesta devuelta por este se adapta al contrato HTTP. Las notas ya no mencionan
+el canal API, pues su creación pertenece al caso de uso y no al transporte.

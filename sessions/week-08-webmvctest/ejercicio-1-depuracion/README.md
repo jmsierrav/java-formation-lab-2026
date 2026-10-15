@@ -12,7 +12,7 @@ dejó un comentario en el PR: *"funciona, pero no pasaría una revisión de dise
 com.indra.catalog.suppliers
 ├── SupplierCatalogApplication.java
 ├── domain/          → Supplier, SupplierRepository, SupplierNotFoundException
-├── application/     → SupplierServiceImpl
+├── application/     → SupplierService, SupplierServiceImpl, CreateSupplierCommand
 ├── infrastructure/  → InMemorySupplierRepository
 └── web/             → SupplierController, SupplierWebMapper, ApiExceptionHandler, dto/
 ```
@@ -52,6 +52,19 @@ Con los tests en verde, refactoriza. El código tiene problemas de diseño que *
 
 > 💡 Al mover lógica fuera del controller, algún test del controller **debe** cambiar. Pregúntate en qué
 > capa debe probarse cada regla y crea el test unitario que corresponda.
+
+### Responsabilidades tras el refactor
+
+- El controller depende de `SupplierService` y solo adapta HTTP; `SupplierWebMapper` es una utilidad
+  sin estado ni bean de Spring, por lo que el slice no necesita `@Import`.
+- `SupplierServiceImpl` recibe `SupplierRepository` por constructor, normaliza razón social
+  (`Locale.ROOT`) y NIT y crea los metadatos antes de persistir. Estas reglas se prueban con
+  `SupplierServiceImplTest`, sin levantar Spring.
+- `Supplier` es inmutable y exige identificador, razón social, NIT canónico y correo con estructura
+  básica válida. `SupplierTest` comprueba sus invariantes incluso fuera de la API.
+- `SupplierControllerTest` verifica contratos HTTP, delegación de datos sin modificar, rechazo de
+  bodies vacíos sin llamar al servicio y respuestas 500 genéricas. El detalle técnico solo se registra
+  en el servidor. Los errores de dominio y los bodies ausentes o ilegibles devuelven 400.
 
 ## Entregable: `HALLAZGOS.md`
 
