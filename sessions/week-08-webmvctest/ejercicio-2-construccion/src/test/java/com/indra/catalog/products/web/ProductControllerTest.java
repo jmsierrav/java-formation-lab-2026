@@ -19,6 +19,7 @@ import com.indra.catalog.products.domain.exception.ProductNotFoundException;
 import com.indra.catalog.products.domain.model.Product;
 import com.indra.catalog.products.infrastructure.security.SecurityConfiguration;
 import java.math.BigDecimal;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -41,6 +42,7 @@ class ProductControllerTest {
     private ProductService productService;
 
     @Test
+    @DisplayName("Devuelve un producto como JSON cuando existe")
     void returnsProductAsJsonWhenItExists() throws Exception {
         when(productService.findById("PRD-0001"))
                 .thenReturn(new Product("PRD-0001", "Laptop", new BigDecimal("3500000.00"), 10));
@@ -56,6 +58,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Devuelve 404 cuando el producto no existe")
     void returnsNotFoundForUnknownProduct() throws Exception {
         when(productService.findById("PRD-9999")).thenThrow(new ProductNotFoundException("PRD-9999"));
 
@@ -67,6 +70,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Crea un producto para un editor y devuelve su ubicación")
     void createsProductAndReturnsLocationForEditor() throws Exception {
         CreateProductCommand command = new CreateProductCommand(
                 "Laptop", new BigDecimal("3500000.00"), 10);
@@ -87,6 +91,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Devuelve un error de validación cuando el nombre está vacío")
     void returnsValidationErrorForBlankName() throws Exception {
         mockMvc.perform(post("/api/products")
                         .with(httpBasic("editor", "test-editor-password"))
@@ -101,6 +106,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Exige autenticación para crear un producto")
     void requiresAuthenticationToCreate() throws Exception {
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,6 +118,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Exige el rol administrador para eliminar un producto")
     void requiresAdminRoleToDelete() throws Exception {
         mockMvc.perform(delete("/api/products/PRD-0001")
                         .with(httpBasic("editor", "test-editor-password")))
@@ -120,6 +127,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Elimina un producto como administrador y devuelve 204")
     void deletesProductAsAdminAndReturnsNoContent() throws Exception {
         mockMvc.perform(delete("/api/products/PRD-0001")
                         .with(httpBasic("admin", "test-admin-password")))

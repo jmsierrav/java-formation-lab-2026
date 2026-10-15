@@ -5,11 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.indra.catalog.products.domain.exception.InvalidProductException;
 import java.math.BigDecimal;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ProductTest {
 
     @Test
+    @DisplayName("Conserva los valores válidos del producto y el precio exacto")
     void keepsValidProductValuesAndExactPrice() {
         Product product = new Product("PRD-0001", "Laptop", new BigDecimal("3500000.00"), 10);
 
@@ -20,6 +22,7 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("Rechaza un precio no positivo")
     void rejectsNonPositivePrice() {
         assertThatThrownBy(() -> new Product("PRD-0001", "Laptop", BigDecimal.ZERO, 10))
                 .isInstanceOf(InvalidProductException.class)
@@ -27,6 +30,7 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("Rechaza nombres vacíos o demasiado largos")
     void rejectsBlankOrLongNames() {
         assertThatThrownBy(() -> new Product("PRD-0001", " ", BigDecimal.ONE, 0))
                 .isInstanceOf(InvalidProductException.class)
@@ -37,6 +41,7 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("Rechaza un inventario negativo")
     void rejectsNegativeStock() {
         assertThatThrownBy(() -> new Product("PRD-0001", "Laptop", BigDecimal.ONE, -1))
                 .isInstanceOf(InvalidProductException.class)

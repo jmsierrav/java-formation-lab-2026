@@ -13,6 +13,7 @@ import com.indra.catalog.products.domain.port.ProductRepository;
 import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -32,6 +33,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Crea un producto con identificador generado y precio exacto")
     void createsProductWithGeneratedIdAndExactPrice() {
         when(repository.save(any(Product.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -44,6 +46,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Encuentra un producto existente")
     void findsExistingProduct() {
         Product product = new Product("PRD-0001", "Laptop", BigDecimal.TEN, 10);
         when(repository.findById(product.id())).thenReturn(Optional.of(product));
@@ -52,6 +55,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Lanza una excepción cuando el producto no existe")
     void throwsWhenProductDoesNotExist() {
         when(repository.findById("PRD-9999")).thenReturn(Optional.empty());
 
@@ -61,6 +65,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Elimina productos existentes y rechaza los inexistentes")
     void deletesExistingProductAndRejectsMissingProduct() {
         when(repository.deleteById("PRD-0001")).thenReturn(true);
         service.delete("PRD-0001");
@@ -72,6 +77,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Rechaza productos inválidos antes de persistirlos")
     void rejectsInvalidProductBeforePersistence() {
         assertThatThrownBy(() -> service.create(
                 new CreateProductCommand("Laptop", BigDecimal.ZERO, 1)))
