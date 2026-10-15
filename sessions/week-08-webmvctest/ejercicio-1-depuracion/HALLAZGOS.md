@@ -15,3 +15,9 @@
 - **Causa raíz**: el request no estaba siendo validado automáticamente porque faltaba la anotación @Valid en el parámetro del método create.
 - **Corrección**: agregué la anotación @Valid al parámetro CreateSupplierRequest en el método create de SupplierController.
 - **Prevención**: siempre usar @Valid en los parámetros de los métodos de los controladores que reciben requests que deben ser validados.
+
+## Fallo 4 — Respuesta de eliminación incorrecta
+- **Síntoma**: el test que verifica la eliminación de un proveedor falla porque la respuesta no es la esperada.
+- **Causa raíz**: el método delete estaba devolviendo `ResponseEntity.ok().build()` en lugar de `ResponseEntity.noContent().build()`.
+- **Corrección**: cambié `ResponseEntity.ok().build()` por `ResponseEntity.noContent().build()` en el método delete de SupplierController.
+- **Prevención**: asegurarse de que los métodos de eliminación devuelvan el código de estado HTTP correcto (204 No Content) según las convenciones REST.
