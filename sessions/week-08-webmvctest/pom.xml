@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+    POM agregador de la semana 08. El pipeline ejecuta `mvn verify` sobre este archivo,
+    por lo que ambos ejercicios deben quedar en verde para poder mergear el PR.
+  -->
+  <groupId>com.indra.catalog</groupId>
+  <artifactId>week-08-webmvctest</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>ejercicio-1-depuracion</module>
+    <module>ejercicio-2-construccion</module>
+  </modules>
+</project>
