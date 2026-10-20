@@ -1,14 +1,7 @@
 package com.indra.retail.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.indra.retail.valueobjects.OrderStatus;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,15 +9,6 @@ import java.util.List;
 
 /**
  * Pedido. La tabla se llama "orders" porque ORDER es palabra reservada en SQL.
- *
- * MODELO INICIAL CON DEFECTOS A PROPÓSITO (ver enunciado.md):
- * TODO(participante):
- *  - customer: pasar a LAZY y quitar el cascade (un pedido no gestiona al cliente).
- *  - items: cascade = {PERSIST, MERGE} en vez de ALL, y orphanRemoval = true.
- *  - status: reemplazar el String por un enum OrderStatus (PENDING, CONFIRMED, SHIPPED)
- *    mapeado con @Enumerated(EnumType.STRING).
- *  - status y createdAt: obligatorios.
- *  - customer_id obligatorio (agregar @JoinColumn(name = "customer_id", nullable = false)).
  */
 @Entity
 @Table(name = "orders")
@@ -34,18 +18,22 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status = "PENDING";
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status = OrderStatus.PENDING;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items = new ArrayList<>();
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private final List<OrderItem> items = new ArrayList<>();
 
     protected Order() {
-      
     }
 
     public Order(Customer customer) {
@@ -62,11 +50,11 @@ public class Order {
         return id;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -81,4 +69,5 @@ public class Order {
     public List<OrderItem> getItems() {
         return items;
     }
+
 }

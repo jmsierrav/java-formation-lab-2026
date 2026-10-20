@@ -1,5 +1,6 @@
 package com.indra.retail.manager;
 
+import com.indra.retail.entities.Order;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -12,8 +13,8 @@ import java.util.Optional;
 /**
  * Operaciones CRUD genéricas usando directamente el {@link EntityManager}.
  *
- * Cada método abre su propia transacción: al terminar, el contexto de
- * persistencia se cierra y las entidades devueltas quedan DETACHED. Por eso
+ * Cada método participa en la transacción existente o abre una nueva. Al terminar
+ * la transacción, las entidades devueltas quedan DETACHED. Por eso
  * acceder a una colección LAZY (p. ej. Order.getItems()) con el resultado de
  * {@link #findById} lanza LazyInitializationException.
  */
@@ -47,6 +48,15 @@ public class EntityManagerRecordManager {
     @Transactional(readOnly = true)
     public <T> Optional<T> findById(Class<T> type, Object id) {
         return Optional.ofNullable(entityManager.find(type, id));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Order> findOrderWithItems(Long id) {
+        return entityManager.createQuery(
+                        "select distinct o from Order o left join fetch o.items where o.id = :id", Order.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
     }
 
     @Transactional(readOnly = true)

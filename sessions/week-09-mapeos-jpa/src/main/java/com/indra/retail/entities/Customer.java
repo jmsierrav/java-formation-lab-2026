@@ -1,13 +1,10 @@
 package com.indra.retail.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -18,15 +15,19 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private final LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private final List<Order> orders = new ArrayList<>();
 
     protected Customer() {
-     
     }
 
     public Customer(String name, String email) {
@@ -57,4 +58,13 @@ public class Customer {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
 }
