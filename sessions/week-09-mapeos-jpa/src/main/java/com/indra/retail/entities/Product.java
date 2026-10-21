@@ -27,6 +27,9 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderItem> items = new ArrayList<>();
 
+    @Version
+    private Long version;
+
     protected Product() {
     }
 
@@ -63,4 +66,17 @@ public class Product {
     public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
 }

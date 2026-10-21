@@ -27,6 +27,9 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private final List<Order> orders = new ArrayList<>();
 
+    @Embedded
+    private Address address;
+
     protected Customer() {
     }
 
@@ -65,6 +68,14 @@ public class Customer {
 
     public void addOrder(Order order) {
         orders.add(order);
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
 }
