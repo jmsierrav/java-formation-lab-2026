@@ -2,12 +2,14 @@ package com.indra.jpa.transactions.service;
 
 import java.math.BigDecimal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.indra.jpa.transactions.exception.InsufficientFundsException;
 import com.indra.jpa.transactions.model.Account;
 import com.indra.jpa.transactions.model.TransferEvent;
 import com.indra.jpa.transactions.repository.AccountRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service 
 public class TransferService {
@@ -15,11 +17,13 @@ public class TransferService {
     private final AccountRepository accountRepository;
     private final TransferAuditService transferAuditService;
 
+    @Autowired
     public TransferService(AccountRepository accountRepository, TransferAuditService transferAuditService) {
         this.accountRepository = accountRepository;
         this.transferAuditService = transferAuditService;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void transfer(Long fromAccountId, Long toAccountId, BigDecimal amount)
             throws InsufficientFundsException {
         if (amount == null || amount.signum() <= 0) {
