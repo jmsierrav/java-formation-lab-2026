@@ -7,7 +7,11 @@ import java.math.BigDecimal;
 
 import com.indra.jpa.transactions.exception.InsufficientFundsException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -40,29 +44,38 @@ class TransactionsApplicationTests {
 		destination = createAccount("Bob", "50.00");
 	}
 
-	@Test
-	void insufficientFundsRollsBackBothBalances() {
+	@ParameterizedTest
+	@ValueSource(strings = {"100.01", "150.00"})
+	@DisplayName("revierte los saldos y conserva la auditoría cuando no hay fondos suficientes")
+	void insufficientFundsRollsBackBothBalancesAndKeepsAudit(String amount) {
 		assertThrows(InsufficientFundsException.class,
-				() -> transferService.transfer(source.getId(), destination.getId(), new BigDecimal("150.00")));
+				() -> transferService.transfer(source.getId(), destination.getId(), new BigDecimal(amount)));
 
 		assertBalance(source.getId(), "100.00");
 		assertBalance(destination.getId(), "50.00");
-	}
-
-	@Test
-	void auditSurvivesTransferRollback() {
-		assertThrows(InsufficientFundsException.class,
-				() -> transferService.transfer(source.getId(), destination.getId(), new BigDecimal("150.00")));
-
 		assertThat(transferEventRepository.count()).isEqualTo(1);
 	}
 
+	@ParameterizedTest
+	@CsvSource({
+			"25.00, 75.00, 75.00",
+			"40.00, 60.00, 90.00"
+	})
+	@DisplayName("actualiza ambos saldos después de una transferencia exitosa")
+	void successfulTransferUpdatesBothBalances(String amount, String expectedSourceBalance,
+			String expectedDestinationBalance) throws InsufficientFundsException {
+		transferService.transfer(source.getId(), destination.getId(), new BigDecimal(amount));
+
+		assertBalance(source.getId(), expectedSourceBalance);
+		assertBalance(destination.getId(), expectedDestinationBalance);
+	}
+
 	@Test
-	void successfulTransferUpdatesBothBalances() throws InsufficientFundsException {
+	@DisplayName("registra un evento de auditoría para una transferencia exitosa")
+	void successfulTransferCreatesAuditEvent() throws InsufficientFundsException {
 		transferService.transfer(source.getId(), destination.getId(), new BigDecimal("25.00"));
 
-		assertBalance(source.getId(), "75.00");
-		assertBalance(destination.getId(), "75.00");
+		assertThat(transferEventRepository.count()).isEqualTo(1);
 	}
 
 	private Account createAccount(String owner, String balance) {
