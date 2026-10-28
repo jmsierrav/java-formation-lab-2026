@@ -1,12 +1,12 @@
 package com.indra.jpa.transactions.service;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import com.indra.jpa.transactions.model.TransferEvent;
 import com.indra.jpa.transactions.repository.TransferEventRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class TransferAuditServiceTest {
 

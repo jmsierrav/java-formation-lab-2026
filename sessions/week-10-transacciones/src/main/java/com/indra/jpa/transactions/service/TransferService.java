@@ -1,15 +1,14 @@
 package com.indra.jpa.transactions.service;
 
-import java.math.BigDecimal;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.indra.jpa.transactions.exception.InsufficientFundsException;
 import com.indra.jpa.transactions.model.Account;
 import com.indra.jpa.transactions.model.TransferEvent;
 import com.indra.jpa.transactions.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 @Service 
 public class TransferService {

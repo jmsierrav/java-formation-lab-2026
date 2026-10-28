@@ -1,13 +1,9 @@
 package com.indra.jpa.transactions.model;
 
-import java.math.BigDecimal;
-
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.Data;
-import jakarta.persistence.Entity; 
+
+import java.math.BigDecimal;
 
 @Data
 @Entity

@@ -1,11 +1,10 @@
 package com.indra.jpa.transactions;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.math.BigDecimal;
-
 import com.indra.jpa.transactions.exception.InsufficientFundsException;
+import com.indra.jpa.transactions.model.Account;
+import com.indra.jpa.transactions.repository.AccountRepository;
+import com.indra.jpa.transactions.repository.TransferEventRepository;
+import com.indra.jpa.transactions.service.TransferService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,10 +14,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.indra.jpa.transactions.model.Account;
-import com.indra.jpa.transactions.repository.AccountRepository;
-import com.indra.jpa.transactions.repository.TransferEventRepository;
-import com.indra.jpa.transactions.service.TransferService;
+import java.math.BigDecimal;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
 		properties = "spring.jpa.properties.hibernate.hbm2ddl.halt_on_error=true")
