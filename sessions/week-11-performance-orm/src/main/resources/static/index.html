@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Performance ORM: N+1 | Java Lab</title>
+  <style>
+    body { font: 17px/1.7 "Trebuchet MS", sans-serif; background: #141616; color: #e8ece9; margin: 0; }
+    main { width: min(100% - 48px, 900px); margin: 0 auto; padding: 32px 0; }
+    h1, h2 { color: #87dfb5; }
+    a { color: #87dfb5; }
+    pre { background: #0e1110; padding: 14px; overflow-x: auto; border-left: 3px solid #ffa58e; }
+    code { color: #ffa58e; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Performance ORM: el problema N+1</h1>
+  <p>Cargas N órdenes con <code>1</code> query y luego Hibernate lanza <code>N</code> queries más para sus ítems y <code>N×3</code> para sus productos.
+     Con 100 órdenes: <strong>1 + 100 + 300 = 401 queries</strong>.</p>
+
+  <h2>Pruébalo</h2>
+  <pre>mvn spring-boot:run -Dspring-boot.run.profiles=dev
+GET <a href="/api/orders">/api/orders</a>
+GET <a href="/api/orders/paged?page=0&amp;size=20">/api/orders/paged?page=0&amp;size=20</a></pre>
+
+  <h2>Cómo detectarlo</h2>
+  <ul>
+    <li><code>spring.jpa.show-sql=true</code> y contar sentencias repetidas.</li>
+    <li><code>hibernate.generate_statistics=true</code> y <code>Statistics.getPrepareStatementCount()</code> (ver <code>QueryCounter</code> en los tests).</li>
+  </ul>
+
+  <h2>Cómo corregirlo</h2>
+  <ul>
+    <li><code>JOIN FETCH</code> en JPQL (cuidado con paginación y colecciones: <code>HHH90003004</code>).</li>
+    <li><code>@EntityGraph</code> como alternativa declarativa.</li>
+    <li><code>hibernate.default_batch_fetch_size</code> para paginados.</li>
+    <li>No uses <code>FetchType.EAGER</code>: mueve el problema, no lo resuelve.</li>
+  </ul>
+</main>
+</body>
+</html>
